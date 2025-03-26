@@ -39,6 +39,14 @@ document.addEventListener('DOMContentLoaded', function() {
         event.stopPropagation() /*Added line*/
     });
 
+    shuffleButton.addEventListener('touchstart', function() {
+	this.classList.add('touched'); // Add a class when touched
+    });
+
+    shuffleButton.addEventListener('touchend', function() {
+        this.classList.remove('touched'); // Remove the class when touch ends
+    });
+
 
     // Event listeners for the close buttons
     infoCloseButton.addEventListener('click', function() {
