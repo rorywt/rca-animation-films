@@ -1,0 +1,153 @@
+/* Center the title */
+h1 {
+    font-family: 'Outfit', Arial, Helvetica, sans-serif;
+    text-align: center;
+}
+
+
+/* Styling for the links and button container */
+.link-container {
+    display: flex;           /* Use flexbox for horizontal layout */
+    justify-content: center; /* Space items evenly */
+    align-items: center;      /* Align items vertically */
+    margin-bottom: 20px;      /* Add some spacing below */
+}
+
+.link-container a { /* Style the links */
+    color: blue;
+    font-family: 'Outfit', Arial, Helvetica, sans-serif;
+    text-decoration: none;
+    
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.link-container button {
+    margin: 0 10px;          /* Spacing between links and button */
+}
+
+/* Basic styling for the popups */
+.popup {
+    display: none;          /* Initially hidden */
+    position: fixed;        /* Stay in place during scrolling */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent background */
+    z-index: 1000;         /* Ensure it's on top */
+}
+
+.popup-content {
+    position: absolute;    /* Position within the popup */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Center the content */
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(1, 1, 1, 0.5); width: 80%;             /* Adjust width as needed */
+    max-width: 600px;       /* Maximum width */
+}
+
+/* Styling for the info popup content */
+#infoPopup .popup-content {
+    background-color: white;      /* Example: Light AliceBlue background */
+}
+
+/* Styling for the website popup content */
+#websitePopup .popup-content {
+    background-color: white;      /* Example: Light Beige background */                 /* Example: Dark text color */
+}
+
+/* Styling for the popup headings */
+.popup-content h2 {
+	font-family: 'Outfit', Arial, Helvetica, sans-serif;
+    font-size: 24px;          /* Adjust font size as needed */
+    font-weight: bold;       /* Make it bold */
+    margin-bottom: 10px;      /* Add some spacing below */
+    color: #333;              /* Set the text color */
+}
+
+/* Styling for the popup paragraphs */
+.popup-content p {
+	font-family: 'Outfit', Arial, Helvetica, sans-serif;
+    font-size: 16px;          /* Adjust font size as needed */
+    line-height: 1.5;         /* Adjust line height for readability */
+    color: #555;              /* Set the text color */
+}
+
+.close-button {
+    position: absolute;    /* Position in the top-right corner */
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+
+/* Center the shuffle button */
+#shuffleButton {
+    display: flex;             /* Use flexbox */
+    justify-content: center;  /* Center content horizontally */
+    align-items: center;  
+    margin-left: 50px;
+    margin-right: 50px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: yellow;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    /* Font Styling */
+    font-family: 'Outfit', Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    color: black;
+    /* Transitions */
+    transition: background-color 0.2s ease, color 0.2s ease, transform 0.1s ease-in-out; /* Smooth transition */
+}
+
+#shuffleButton:hover {
+    background-color: black;
+    color: yellow;
+}
+
+#shuffleButton:active {
+    transform: scale(0.65); /* Shrink on click */
+}
+
+#shuffleButton:focus {
+    outline: 0px solid orange;
+}
+
+#videoGrid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    padding: 20px;
+}
+
+.videoContainer {
+    width: 30%;
+    margin-bottom: 20px;
+}
+
+.videoContainer iframe {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+}
+
+@media (max-width: 768px) {
+    .videoContainer {
+        width: 45%;
+    }
+}
+
+@media (max-width: 480px) {
+    .videoContainer {
+        width: 90%;
+    }
+}
