@@ -114,6 +114,13 @@ a:hover {
     color: yellow;
 }
 
+@media (hover: none) {
+    #shuffleButton:hover {
+        background-color: yellow; /* Revert the background color */
+        color: black; /* Revert the text color */
+    }
+}
+
 #shuffleButton:active {
     transform: scale(0.65); /* Shrink on click */
 }
