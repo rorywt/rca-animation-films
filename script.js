@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let videoTitles = []; // New array to store video titles
     let videoYears = []; // New array to store video years
     let videoDirectors = []; // New array to store directors
+    let videoFilmTypes = []; // NEW: Array to store gradfilm status
     const videosToDisplay = 9;
 
     // Get references to the links and popups
@@ -78,13 +79,13 @@ document.addEventListener('DOMContentLoaded', function() {
         
         const lines = csvData.split('\n');
         const header = lines[0].split(',');
-        console.log("Header array:", header);
+        //console.log("Header array:", header);
 
         const urlIndex = header.indexOf('video_url');
         const titleIndex = header.indexOf('film_title'); // Assuming a 'film_title' column
         const yearIndex = header.indexOf('film_year');
         const directorIndex = header.indexOf('director');
-        console.log("directorIndex:", directorIndex); // Add this line
+        const filmtypeIndex = header.indexOf('film_type');
     
         if (urlIndex === -1) {
             console.error("CSV does not contain a 'video_url' column.");
@@ -98,9 +99,11 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error("CSV does not contain a 'film_year' column.");
             return;
         }
-        
         if (directorIndex === -1) {
             console.warn("CSV does not contain a 'director' column. Data will be missing.");
+        }
+        if (filmtypeIndex === -1) {
+            console.warn("CSV does not contain a 'film_type' column. Data will be missing.");
         }
         
     
@@ -124,11 +127,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 videoTitles.push(values[titleIndex]);
                 videoYears.push(values[yearIndex]);
                 videoDirectors.push(values[directorIndex]);
+                videoFilmTypes.push(filmtypeIndex !== -1 ? values[filmtypeIndex] : "");
             }
         }
-    
-        
-    
     }
 
     // Function to create the video grid with a specified number of videos
@@ -197,27 +198,31 @@ document.addEventListener('DOMContentLoaded', function() {
     // Function to display the existing video titles in alphabetical order
     function displayVideoTitles() {
         // Reset the List to make sure it's clear if the code is running again.
-         document.querySelector("#videoTitlesList").innerHTML = "";
+        document.querySelector("#videoTitlesList").innerHTML = "";
 
-         // The list needs to be alphabetical and links to the video
-         let titleUrl = [];
-          for (let i = 0; i < videoUrls.length; i++) {
-          titleUrl.push({"title":videoTitles[i]+" ("+videoYears[i]+")", "link":videoUrls[i], "director":videoDirectors[i]});
-           }
+        // The list needs to be alphabetical and links to the video
+        let titleUrl = [];
+        for (let i = 0; i < videoUrls.length; i++) {
+            titleUrl.push({"title":videoTitles[i], "link":videoUrls[i], "director":videoDirectors[i]+" ("+videoYears[i]+")", "filmtype": videoFilmTypes[i]});
+        }
 
          // Sort the titles alphabetically by comparing the string.
          titleUrl = titleUrl.sort((a, b) => a.title.localeCompare(b.title));
 
          // Display all of the title information that we have gathered from the JSON API.
          for (let i = 0; i < titleUrl.length; i++) {
-             let obj = titleUrl[i];
-
+            let obj = titleUrl[i];
+            //style the text if "grad film"
+            let gradfilmStyle = ""; // Default style
+            if (obj.filmtype === "Grad film") { // Case-insensitive check
+                gradfilmIndicator = "*";
+            }
+            else {
+                gradfilmIndicator = "";
+            }
              // Add them to the bulleted list.
-             document.querySelector("#videoTitlesList").innerHTML +=
-                 `<li><a href='${obj.link}' target="_blank">${obj.title}</a>${obj.director}</li>`
+            document.querySelector("#videoTitlesList").innerHTML +=
+                 `<li><a href='${obj.link}' target="_blank" >${obj.title}${gradfilmIndicator}</a>${obj.director}</li>`
          }
      }
-
-     //add into existing call to website link
-
 });
