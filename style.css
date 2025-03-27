@@ -58,7 +58,36 @@ a:hover {
 
 /* Styling for the website popup content */
 #websitePopup .popup-content {
-    background-color: white;      /* Example: Light Beige background */                 /* Example: Dark text color */
+    background-color: white;      /* Example: Light Beige background */           
+    max-height: 400px;                   /* Limiting the maximum height of the pop up */
+    overflow-y: scroll;                 /* Setting up the vertical scroll bar */
+}
+
+/* Style the video list items */
+#videoTitlesList {
+    list-style-type: none; /* So the video has no bullet point */
+    padding-left: 0;
+    display: flex;             /* Use flexbox for layout */
+    flex-wrap: wrap;            /* Allow items to wrap to the next row */
+    justify-content: flex-start; /* Align items to the left */
+}
+/* Style the video list items */
+ #videoTitlesList li {
+    width: 50%;  
+    padding: 2px 0;                 /* spacing between each of the titles */
+ }
+
+ #videoTitlesList a {
+    display: block;               /* Make links fill the li */
+    padding: 2px;                  /* Spacing within the link */
+    color: blue;
+    font-family: 'Outfit', Arial, Helvetica, sans-serif;
+    font-size: 10px; 
+    text-decoration: none;        /* Remove underline */
+}
+
+#videoTitlesList a:hover {
+    text-decoration: underline;    /* Add underline on hover */
 }
 
 /* Styling for the popup headings */
@@ -76,6 +105,16 @@ a:hover {
     font-size: 16px;          /* Adjust font size as needed */
     line-height: 1.5;         /* Adjust line height for readability */
     color: #555;              /* Set the text color */
+}
+
+/* Styling for the popup links */
+.popup-content a {
+    color: blue;              /* Set the text color */
+    text-decoration: none; 
+}
+
+.popup-content a:hover {
+    text-decoration: underline;    /* Add underline on hover */
 }
 
 .close-button {

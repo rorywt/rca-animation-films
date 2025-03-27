@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const videoGrid = document.getElementById('videoGrid');
     const shuffleButton = document.getElementById('shuffleButton');
     let videoUrls = [];
+    let videoTitles = []; // New array to store video titles
     const videosToDisplay = 9;
 
     // Get references to the links and popups
@@ -36,6 +37,7 @@ document.addEventListener('DOMContentLoaded', function() {
     websiteLink.addEventListener('click', function(event) {
         event.preventDefault(); // Prevent the link from navigating
         showPopup(websitePopup);
+        displayVideoTitles()
         event.stopPropagation() /*Added line*/
     });
 
@@ -68,23 +70,44 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // The rest of your existing JavaScript code (parseCSV, createVideoGrid, shuffleArray, getRandomVideos, fetch, shuffleButton listener) goes here...
     
-    // Function to parse the CSV and populate videoUrls array
     function parseCSV(csvData) {
         const lines = csvData.split('\n');
         const header = lines[0].split(',');
         const urlIndex = header.indexOf('video_url');
-
+        const titleIndex = header.indexOf('video_title'); // Assuming a 'video_title' column
+    
         if (urlIndex === -1) {
             console.error("CSV does not contain a 'video_url' column.");
             return;
         }
-
+        if (titleIndex === -1) {
+            console.error("CSV does not contain a 'video_title' column.");
+            return;
+        }
+    
+        // Regex to split by commas but respect quoted fields.
+        const regex = /(?:([^",\r\n]+)|(?:"([^"\r\n]+)"))(?:,|$)/g;
+    
         for (let i = 1; i < lines.length; i++) {
-            const values = lines[i].split(',');
-            if (values[urlIndex]) {
-                videoUrls.push(values[urlIndex].trim());
+            const line = lines[i].trim(); // trim line.
+            if (!line) continue; //skip empty lines
+            const values = [];
+            let match;
+    
+            // Use regex to extract values from the line
+            while ((match = regex.exec(line)) !== null) {
+                const value = match[1] || match[2] || "";
+                values.push(value.trim()); //trim whitespace from each value
+            }
+    
+            if (values[urlIndex] && values[titleIndex]) {
+                videoUrls.push(values[urlIndex]);
+                videoTitles.push(values[titleIndex]);
             }
         }
+    
+        
+    
     }
 
     // Function to create the video grid with a specified number of videos
@@ -148,4 +171,32 @@ document.addEventListener('DOMContentLoaded', function() {
         const shuffledVideos = getRandomVideos(videoUrls, videosToDisplay);
         createVideoGrid(shuffledVideos);
     });
+
+
+    // Function to display the existing video titles in alphabetical order
+    function displayVideoTitles() {
+        // Reset the List to make sure it's clear if the code is running again.
+         document.querySelector("#videoTitlesList").innerHTML = "";
+
+         // The list needs to be alphabetical and links to the video
+         let titleUrl = [];
+          for (let i = 0; i < videoUrls.length; i++) {
+          titleUrl.push({"title":videoTitles[i], "link":videoUrls[i]});
+           }
+
+         // Sort the titles alphabetically by comparing the string.
+         titleUrl = titleUrl.sort((a, b) => a.title.localeCompare(b.title));
+
+         // Display all of the title information that we have gathered from the JSON API.
+         for (let i = 0; i < titleUrl.length; i++) {
+             let obj = titleUrl[i];
+
+             // Add them to the bulleted list.
+             document.querySelector("#videoTitlesList").innerHTML +=
+                 `<li><a href='${obj.link}'>${obj.title}</a></li>`
+         }
+     }
+
+     //add into existing call to website link
+
 });
