@@ -212,8 +212,6 @@ document.addEventListener('DOMContentLoaded', function() {
          // Display all of the title information that we have gathered from the JSON API.
          for (let i = 0; i < titleUrl.length; i++) {
             let obj = titleUrl[i];
-            //style the text if "grad film"
-            let gradfilmStyle = ""; // Default style
             if (obj.filmtype === "Grad film") { // Case-insensitive check
                 gradfilmIndicator = "*";
             }
@@ -222,7 +220,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
              // Add them to the bulleted list.
             document.querySelector("#videoTitlesList").innerHTML +=
-                 `<li><a href='${obj.link}' target="_blank" >${obj.title}${gradfilmIndicator}</a>${obj.director}</li>`
+                 `<li><a href='${obj.link}' target="_blank" >${obj.title}${gradfilmIndicator}</a>${obj.director}</li>`;
          }
      }
 });
