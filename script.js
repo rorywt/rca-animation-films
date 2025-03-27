@@ -3,6 +3,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const shuffleButton = document.getElementById('shuffleButton');
     let videoUrls = [];
     let videoTitles = []; // New array to store video titles
+    let videoYears = []; // New array to store video years
+    let videoDirectors = []; // New array to store directors
     const videosToDisplay = 9;
 
     // Get references to the links and popups
@@ -71,19 +73,36 @@ document.addEventListener('DOMContentLoaded', function() {
     // The rest of your existing JavaScript code (parseCSV, createVideoGrid, shuffleArray, getRandomVideos, fetch, shuffleButton listener) goes here...
     
     function parseCSV(csvData) {
+        // Normalize line endings to just '\n'
+        csvData = csvData.replace(/\r\n/g, '\n').replace(/\r/g, '\n'); //Best practice
+        
         const lines = csvData.split('\n');
         const header = lines[0].split(',');
+        console.log("Header array:", header);
+
         const urlIndex = header.indexOf('video_url');
-        const titleIndex = header.indexOf('video_title'); // Assuming a 'video_title' column
+        const titleIndex = header.indexOf('film_title'); // Assuming a 'film_title' column
+        const yearIndex = header.indexOf('film_year');
+        const directorIndex = header.indexOf('director');
+        console.log("directorIndex:", directorIndex); // Add this line
     
         if (urlIndex === -1) {
             console.error("CSV does not contain a 'video_url' column.");
             return;
         }
         if (titleIndex === -1) {
-            console.error("CSV does not contain a 'video_title' column.");
+            console.error("CSV does not contain a 'film_title' column.");
             return;
         }
+        if (yearIndex === -1) {
+            console.error("CSV does not contain a 'film_year' column.");
+            return;
+        }
+        
+        if (directorIndex === -1) {
+            console.warn("CSV does not contain a 'director' column. Data will be missing.");
+        }
+        
     
         // Regex to split by commas but respect quoted fields.
         const regex = /(?:([^",\r\n]+)|(?:"([^"\r\n]+)"))(?:,|$)/g;
@@ -100,9 +119,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 values.push(value.trim()); //trim whitespace from each value
             }
     
-            if (values[urlIndex] && values[titleIndex]) {
+            if (values[urlIndex] && values[titleIndex] && values[yearIndex]) {
                 videoUrls.push(values[urlIndex]);
                 videoTitles.push(values[titleIndex]);
+                videoYears.push(values[yearIndex]);
+                videoDirectors.push(values[directorIndex]);
             }
         }
     
@@ -128,7 +149,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 iframe.height = "360";
                 iframe.frameBorder = "0";
                 iframe.allow = "autoplay; fullscreen; picture-in-picture";
-                iframe.allowFullscreen = true;
+                //iframe.allowFullscreen = true;
                 videoContainer.appendChild(iframe);
             } else {
                 console.warn("Invalid Vimeo URL:", url);
@@ -181,7 +202,7 @@ document.addEventListener('DOMContentLoaded', function() {
          // The list needs to be alphabetical and links to the video
          let titleUrl = [];
           for (let i = 0; i < videoUrls.length; i++) {
-          titleUrl.push({"title":videoTitles[i], "link":videoUrls[i]});
+          titleUrl.push({"title":videoTitles[i]+" ("+videoYears[i]+")", "link":videoUrls[i], "director":videoDirectors[i]});
            }
 
          // Sort the titles alphabetically by comparing the string.
@@ -193,7 +214,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
              // Add them to the bulleted list.
              document.querySelector("#videoTitlesList").innerHTML +=
-                 `<li><a href='${obj.link}'>${obj.title}</a></li>`
+                 `<li><a href='${obj.link}' target="_blank">${obj.title}</a>${obj.director}</li>`
          }
      }
 

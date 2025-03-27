@@ -73,16 +73,19 @@ a:hover {
 }
 /* Style the video list items */
  #videoTitlesList li {
-    width: 50%;  
-    padding: 2px 0;                 /* spacing between each of the titles */
+    width: 48%;  
+    padding: 5px 2px;                 /* spacing between each of the titles */
+    color: lightskyblue;
+    font-size: 10px; 
+    font-family: 'Outfit', Arial, Helvetica, sans-serif;
  }
 
  #videoTitlesList a {
     display: block;               /* Make links fill the li */
-    padding: 2px;                  /* Spacing within the link */
+    padding: 0px;                  /* Spacing within the link */
     color: blue;
     font-family: 'Outfit', Arial, Helvetica, sans-serif;
-    font-size: 10px; 
+    font-size: 12px; 
     text-decoration: none;        /* Remove underline */
 }
 
@@ -116,6 +119,8 @@ a:hover {
 .popup-content a:hover {
     text-decoration: underline;    /* Add underline on hover */
 }
+
+
 
 .close-button {
     position: absolute;    /* Position in the top-right corner */
