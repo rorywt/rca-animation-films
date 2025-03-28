@@ -135,31 +135,40 @@ document.addEventListener('DOMContentLoaded', function() {
     // Function to create the video grid with a specified number of videos
     function createVideoGrid(urls) {
         videoGrid.innerHTML = ''; // Clear existing content
-
+    
         urls.forEach(url => {
             const videoContainer = document.createElement('div');
             videoContainer.classList.add('videoContainer');
-
-            // Extract Vimeo Video ID from URL (handles both full and short URLs)
-            const videoId = url.match(/(?:https?:\/\/)?vimeo\.com\/(\d+)/)?.[1];
-
-            if (videoId) {
-                const iframe = document.createElement('iframe');
-                iframe.src = `https://player.vimeo.com/video/${videoId}`;
-                iframe.width = "640";
-                iframe.height = "360";
-                iframe.frameBorder = "0";
-                iframe.allow = "autoplay; fullscreen; picture-in-picture";
-                //iframe.allowFullscreen = true;
-                videoContainer.appendChild(iframe);
+    
+            let embedCode = '';
+    
+            // Check if the URL is a Vimeo URL
+            const vimeoIdMatch = url.match(/(?:https?:\/\/)?vimeo\.com\/(\d+)/);
+    
+            if (vimeoIdMatch) {
+                const videoId = vimeoIdMatch[1];
+                embedCode = `<iframe src="https://player.vimeo.com/video/${videoId}" width="640" height="360" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
             } else {
-                console.warn("Invalid Vimeo URL:", url);
-                videoContainer.textContent = "Invalid Vimeo URL";
+                // Check if the URL is a YouTube URL
+                const youtubeIdMatch = url.match(/(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]{11})/);
+    
+                if (youtubeIdMatch) {
+                    const videoId = youtubeIdMatch[1];
+                    embedCode = `<iframe width="640" height="360" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`;
+                } else {
+                    console.warn("Invalid Video URL:", url);
+                    videoContainer.textContent = "Invalid Video URL";
+                }
             }
-
+    
+            // Add the embed code to the video container
+            if (embedCode) {
+                videoContainer.innerHTML = embedCode;
+            }
+    
             videoGrid.appendChild(videoContainer);
         });
-	}
+    }
 
     // Function to shuffle the array of URLs (Fisher-Yates Shuffle)
     function shuffleArray(array) {
@@ -197,6 +206,27 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Function to display the existing video titles in alphabetical order
     function displayVideoTitles() {
+
+        const filmCount = videoUrls.length;
+        const filmCountElement = document.createElement('p');
+        filmCountElement.textContent = `Total of ${filmCount} films. * denotes grad film.`;
+        filmCountElement.id = 'filmCount'; // Add an ID so we can find it later to remove.
+
+        // Get a reference to the content element in websitePopup
+        const websitePopupContent = document.querySelector('#websitePopup .popup-content');
+
+        // Clear any existing film count element (if it exists)
+        const existingFilmCountElement = websitePopupContent.querySelector('#filmCount');
+         if (existingFilmCountElement) {
+            websitePopupContent.removeChild(existingFilmCountElement);
+         }
+
+    // Get a reference to the videoTitlesList element
+    const videoTitlesList = document.getElementById('videoTitlesList');
+
+    // Insert the filmCountElement before the videoTitlesList
+    websitePopupContent.insertBefore(filmCountElement, videoTitlesList);
+
         // Reset the List to make sure it's clear if the code is running again.
         document.querySelector("#videoTitlesList").innerHTML = "";
 
