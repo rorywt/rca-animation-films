@@ -4,7 +4,8 @@ document.addEventListener('DOMContentLoaded', function() {
     let videoUrls = [];
     let videoTitles = []; // New array to store video titles
     let videoYears = []; // New array to store video years
-    let videoDirectors = []; // New array to store directors
+    let videoDirFirstnames = []; // New array to store directors
+    let videoDirSurnames = []; // New array to store directors
     let videoFilmTypes = []; // NEW: Array to store gradfilm status
     const videosToDisplay = 9;
 
@@ -84,7 +85,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const urlIndex = header.indexOf('video_url');
         const titleIndex = header.indexOf('film_title'); // Assuming a 'film_title' column
         const yearIndex = header.indexOf('film_year');
-        const directorIndex = header.indexOf('director');
+        const dirFirstnameIndex = header.indexOf('dir_firstname');
+        const dirSurnameIndex = header.indexOf('dir_surname');
         const filmtypeIndex = header.indexOf('film_type');
     
         if (urlIndex === -1) {
@@ -99,7 +101,10 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error("CSV does not contain a 'film_year' column.");
             return;
         }
-        if (directorIndex === -1) {
+        if (dirFirstnameIndex === -1) {
+            console.warn("CSV does not contain a 'director' column. Data will be missing.");
+        }
+        if (dirSurnameIndex === -1) {
             console.warn("CSV does not contain a 'director' column. Data will be missing.");
         }
         if (filmtypeIndex === -1) {
@@ -126,7 +131,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 videoUrls.push(values[urlIndex]);
                 videoTitles.push(values[titleIndex]);
                 videoYears.push(values[yearIndex]);
-                videoDirectors.push(values[directorIndex]);
+                videoDirFirstnames.push(values[dirFirstnameIndex]);
+                videoDirSurnames.push(values[dirSurnameIndex]);
                 videoFilmTypes.push(filmtypeIndex !== -1 ? values[filmtypeIndex] : "");
             }
         }
@@ -233,7 +239,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // The list needs to be alphabetical and links to the video
         let titleUrl = [];
         for (let i = 0; i < videoUrls.length; i++) {
-            titleUrl.push({"title":videoTitles[i], "link":videoUrls[i], "director":videoDirectors[i]+" ("+videoYears[i]+")", "filmtype": videoFilmTypes[i]});
+            titleUrl.push({"title":videoTitles[i], "link":videoUrls[i], "director":videoDirFirstnames[i]+" "+videoDirSurnames[i]+" | "+videoYears[i], "filmtype": videoFilmTypes[i]});
         }
 
          // Sort the titles alphabetically by comparing the string.
